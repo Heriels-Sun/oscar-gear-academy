@@ -1,22 +1,83 @@
 #![no_std]
+use gstd::{msg, prelude::*, exec};
+use tamagotchi_io::*;
 
-#[allow(unused_imports)]
-use gstd::prelude::*;
-
-// TODO: 4️⃣ Define constants
+static mut TAMAGOTCHI: Option<Tamagotchi> = None;
 
 #[no_mangle]
 extern fn init() {
-    // TODO: 0️⃣ Copy the `init` function from the previous lesson and push changes to the master branch
+    let name: String = msg::load().expect("Failed to decode Tamagotchi name");
+    let current_time_block = exec::block_timestamp();
+
+    let tmg = Tamagotchi {
+        name, 
+        age: current_time_block,
+        owner: msg::source(),
+        fed: MAX_VALUE,
+        fed_block: current_time_block,
+        entertained: MAX_VALUE,
+        entertained_block: current_time_block,
+        slept: MAX_VALUE,
+        slept_block: current_time_block,
+    };
+
+    unsafe {
+        TAMAGOTCHI = Some(tmg);
+    }
 }
 
 #[no_mangle]
-extern fn handle() {
-    // TODO: 0️⃣ Copy the `handle` function from the previous lesson and push changes to the master branch
-    // TODO: 5️⃣ Add new logic for calculating the `fed`, `entertained` and `slept` levels
+extern "C" fn handle() {
+    let action: TmgAction = msg::load().expect("Unable to decode `TmgAction`");
+    let tmg = unsafe { TAMAGOTCHI.get_or_insert(Default::default()) };
+    match action {
+        TmgAction::Name => {
+            msg::reply(TmgEvent::Name(tmg.name.clone()), 0)
+                .expect("Error in a reply `TmgEvent::Name`");
+        }
+        TmgAction::Age => {
+            let age = exec::block_timestamp() - tmg.age;
+            msg::reply(TmgEvent::Age(age), 0)
+                .expect("Error in a reply `TmgEvent::Age`");
+        }
+        TmgAction::Feed => {
+            tmg.fed += FILL_PER_FEED - tmg.calculate_hunger();
+            tmg.fed_block = exec::block_timestamp();
+            tmg.fed = if tmg.fed > MAX_VALUE {
+                MAX_VALUE
+            } else {
+                tmg.fed
+            };
+        msg::reply(TmgEvent::Fed, 0).expect("Error in a reply `TmgEvent::Fed`");
+
+        },
+        TmgAction::Entertain => {
+            tmg.fed += FILL_PER_ENTERTAINMENT - tmg.calculate_boredom();
+            tmg.fed_block = exec::block_timestamp();
+            tmg.fed = if tmg.fed > MAX_VALUE {
+                MAX_VALUE
+            } else {
+                tmg.fed
+            };
+        msg::reply(TmgEvent::Entertained, 0).expect("Error in a reply `TmgEvent::Entertained`");
+
+        },
+        TmgAction::Sleep => {
+            tmg.fed += FILL_PER_FEED - tmg.calculate_energy();
+            tmg.fed_block = exec::block_timestamp();
+            tmg.fed = if tmg.fed > MAX_VALUE {
+                MAX_VALUE
+            } else {
+                tmg.fed
+            };
+        msg::reply(TmgEvent::Slept, 0).expect("Error in a reply `TmgEvent::Slept`");
+        },
+
+    };
 }
 
 #[no_mangle]
 extern fn state() {
-    // TODO: 0️⃣ Copy the `handle` function from the previous lesson and push changes to the master branch
+    let tmg = unsafe { TAMAGOTCHI.take().expect("Error in taking current state") };
+    msg::reply(tmg, 0).expect("Failed to reply state");
 }
