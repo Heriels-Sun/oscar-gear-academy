@@ -1,9 +1,12 @@
 [package]
-name = "tamagotchi-auto-io"
-version.workspace = true
-edition.workspace = true
-publish.workspace = true
+name = "tamagotchi-io"
+version = "0.1.0"
+edition = "2021"
 
 [dependencies]
-gmeta.workspace = true
-gstd.workspace = true
+gmeta = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2" }
+gstd = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2" }
+parity-scale-codec = { version = "3", default-features = false }
+scale-info = { version = "2", default-features = false }
+sharded-fungible-token-io = { git = "https://github.com/gear-foundation/dapps", tag = "v1.0.2" }
+store-io = { path = "../store/io" }
