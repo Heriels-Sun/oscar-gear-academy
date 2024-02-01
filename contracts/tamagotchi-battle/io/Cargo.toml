@@ -1,5 +1,5 @@
 [package]
-name = "tamagotchi-io"
+name = "tamagotchi-battle-io"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,5 +8,5 @@ gmeta = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2" }
 gstd = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2" }
 parity-scale-codec = { version = "3", default-features = false }
 scale-info = { version = "2", default-features = false }
-sharded-fungible-token-io = { git = "https://github.com/gear-foundation/dapps", tag = "v1.0.2" }
-store-io = { path = "../store/io" }
+store-io = { path = "../../05-tamagotchi-auto/store/io" }
+tamagotchi-io = { path = "../../05-tamagotchi-auto/io" }

@@ -1,17 +1,21 @@
 [package]
-name = "tamagotchi-05"
+name = "tamagotchi-battle"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 gstd = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2", features = ["debug"] }
-sharded-fungible-token-io = { git = "https://github.com/gear-foundation/dapps", tag = "v1.0.2" }
-tamagotchi-io = { path = "io" }
-store-io = { path = "store/io" }
+tamagotchi-battle-io = { path = "io" }
+store-io = { path = "../05-tamagotchi-auto/store/io" }
+tamagotchi-io = { path = "../05-tamagotchi-auto/io" }
+parity-scale-codec = { version = "3", default-features = false }
+scale-info = { version = "2", default-features = false }
 
 [build-dependencies]
 gear-wasm-builder = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2", features = ["wasm-opt"] }
-tamagotchi-io = { path = "io" }
+tamagotchi-battle-io = { path = "io" }
+store-io = { path = "../05-tamagotchi-auto/store/io" }
+tamagotchi-io = { path = "../05-tamagotchi-auto/io" }
 
 [dev-dependencies]
 gtest = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2" }
