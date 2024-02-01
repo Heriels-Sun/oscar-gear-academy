@@ -1,13 +1,18 @@
 [package]
-name = "tamagotchi-auto"
-version.workspace = true
-edition.workspace = true
-publish.workspace = true
+name = "tamagotchi-05"
+version = "0.1.0"
+edition = "2021"
 
 [dependencies]
-gstd.workspace = true
-tamagotchi-auto-io.workspace = true
+gstd = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2", features = ["debug"] }
+sharded-fungible-token-io = { git = "https://github.com/gear-foundation/dapps", tag = "v1.0.2" }
+tamagotchi-io = { path = "io" }
+store-io = { path = "store/io" }
 
 [build-dependencies]
-gear-wasm-builder.workspace = true
-tamagotchi-auto-io.workspace = true
+gear-wasm-builder = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2", features = ["wasm-opt"] }
+tamagotchi-io = { path = "io" }
+
+[dev-dependencies]
+gtest = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2" }
+gstd = { git = "https://github.com/gear-tech/gear.git", tag = "v1.0.2", features = ["debug"] }
